@@ -4,7 +4,7 @@ import { Flower2, Compass, Sparkles, Mail, ShoppingBag } from 'lucide-react';
 import { PageTab } from '../../types';
 
 export const Navbar: React.FC = () => {
-  const { currentTab, setCurrentTab, totalStemsCount, totalBouquetCost } = useFlorist();
+  const { currentTab, setCurrentTab, totalStemsCount, totalBouquetCost, cartItems, cartTotal } = useFlorist();
 
   const navItems: { tab: PageTab; label: string; icon: React.ReactNode }[] = [
     { tab: 'home', label: 'Home', icon: <Flower2 className="w-4 h-4" /> },
@@ -65,22 +65,24 @@ export const Navbar: React.FC = () => {
         {/* Quick Cart Pill & Action */}
         <div className="flex items-center gap-3">
           <button
-            onClick={() => setCurrentTab('builder')}
+            onClick={() => setCurrentTab(cartItems.length > 0 && totalStemsCount === 0 ? 'review' : 'builder')}
             className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-cream-50 border border-dustyPink-300 text-deepBrown-500 hover:border-dustyPink-500 hover:shadow-soft transition-all"
-            title="View your custom bouquet composition"
+            title={cartItems.length > 0 ? "View your cart and order" : "View your custom bouquet composition"}
           >
             <div className="relative">
               <ShoppingBag className="w-5 h-5 text-deepBrown-500" />
-              {totalStemsCount > 0 && (
+              {(cartItems.length > 0 || totalStemsCount > 0) && (
                 <span className="absolute -top-1.5 -right-2 bg-dustyPink-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {totalStemsCount}
+                  {cartItems.length > 0 ? cartItems.length : totalStemsCount}
                 </span>
               )}
             </div>
             <div className="text-left hidden sm:block">
-              <div className="text-[11px] text-deepBrown-400 leading-none">Bouquet</div>
+              <div className="text-[11px] text-deepBrown-400 leading-none">
+                {cartItems.length > 0 ? `Cart (${cartItems.length})` : 'Bouquet'}
+              </div>
               <div className="text-sm font-semibold text-deepBrown-500 leading-tight">
-                ${totalBouquetCost.toFixed(2)}
+                ${(cartItems.length > 0 && totalStemsCount === 0 ? cartTotal : totalBouquetCost).toFixed(2)}
               </div>
             </div>
           </button>

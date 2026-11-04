@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFlorist } from '../../context/FloristContext';
-import { ArrowRight, AlertCircle, Layers } from 'lucide-react';
+import { ArrowRight, AlertCircle, ShoppingBag, Check } from 'lucide-react';
 
 export const PriceSummaryBar: React.FC = () => {
   const {
@@ -13,10 +13,21 @@ export const PriceSummaryBar: React.FC = () => {
     selectedRibbon,
     totalBouquetCost,
     totalStemsCount,
-    setCurrentTab
+    setCurrentTab,
+    addToCart,
+    cartCount
   } = useFlorist();
 
+  const [addedSuccess, setAddedSuccess] = useState(false);
+
   const isBouquetEmpty = totalStemsCount === 0;
+
+  const handleAddToCart = () => {
+    if (isBouquetEmpty) return;
+    addToCart();
+    setAddedSuccess(true);
+    setTimeout(() => setAddedSuccess(false), 2500);
+  };
 
   return (
     <div className="bg-cream-50 rounded-2xl p-5 border border-cream-300 shadow-soft space-y-4">
@@ -72,14 +83,34 @@ export const PriceSummaryBar: React.FC = () => {
         </div>
       )}
 
-      <button
-        onClick={() => setCurrentTab('card')}
-        disabled={isBouquetEmpty}
-        className="w-full py-3.5 px-4 rounded-xl bg-deepBrown-500 hover:bg-deepBrown-600 disabled:opacity-50 text-cream-100 font-medium text-xs uppercase tracking-wider transition-all shadow-soft flex items-center justify-center gap-2"
-      >
-        <span>Proceed to Greeting Card (Step 4)</span>
-        <ArrowRight className="w-4 h-4 text-dustyPink-300" />
-      </button>
+      <div className="space-y-2.5 pt-1">
+        <button
+          onClick={handleAddToCart}
+          disabled={isBouquetEmpty}
+          className="w-full py-2.5 px-4 rounded-xl border border-dustyPink-300 bg-cream-100 hover:bg-dustyPink-50 disabled:opacity-50 text-deepBrown-500 font-medium text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-sm"
+        >
+          {addedSuccess ? (
+            <>
+              <Check className="w-4 h-4 text-emerald-600" />
+              <span className="text-emerald-700 font-semibold">Bouquet Saved to Cart ({cartCount})</span>
+            </>
+          ) : (
+            <>
+              <ShoppingBag className="w-4 h-4 text-dustyPink-500" />
+              <span>Add Bouquet to Cart {cartCount > 0 ? `(${cartCount})` : ''}</span>
+            </>
+          )}
+        </button>
+
+        <button
+          onClick={() => setCurrentTab('card')}
+          disabled={isBouquetEmpty}
+          className="w-full py-3.5 px-4 rounded-xl bg-deepBrown-500 hover:bg-deepBrown-600 disabled:opacity-50 text-cream-100 font-medium text-xs uppercase tracking-wider transition-all shadow-soft flex items-center justify-center gap-2"
+        >
+          <span>Proceed to Greeting Card (Step 4)</span>
+          <ArrowRight className="w-4 h-4 text-dustyPink-300" />
+        </button>
+      </div>
     </div>
   );
 };

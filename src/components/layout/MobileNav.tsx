@@ -4,14 +4,14 @@ import { Flower2, Compass, Sparkles, Mail, CheckCircle2 } from 'lucide-react';
 import { PageTab } from '../../types';
 
 export const MobileNav: React.FC = () => {
-  const { currentTab, setCurrentTab, totalStemsCount } = useFlorist();
+  const { currentTab, setCurrentTab, totalStemsCount, cartCount } = useFlorist();
 
   const navItems: { tab: PageTab; label: string; icon: React.ReactNode; badge?: number }[] = [
     { tab: 'home', label: 'Home', icon: <Flower2 className="w-5 h-5" /> },
     { tab: 'catalog', label: 'Meaning', icon: <Compass className="w-5 h-5" /> }, // "Exclude stems"
-    { tab: 'builder', label: 'Builder', icon: <Sparkles className="w-5 h-5" />, badge: totalStemsCount },
+    { tab: 'builder', label: 'Builder', icon: <Sparkles className="w-5 h-5" />, badge: totalStemsCount > 0 ? totalStemsCount : undefined },
     { tab: 'card', label: 'Card', icon: <Mail className="w-5 h-5" /> },
-    { tab: 'review', label: 'Delivery', icon: <CheckCircle2 className="w-5 h-5" /> },
+    { tab: 'review', label: 'Delivery', icon: <CheckCircle2 className="w-5 h-5" />, badge: cartCount > 0 ? cartCount : undefined },
   ];
 
   return (

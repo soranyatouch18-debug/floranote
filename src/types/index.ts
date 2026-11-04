@@ -112,9 +112,25 @@ export interface DeliveryDetails {
   paymentMethod: PaymentMethod;
 }
 
+export interface CartItem {
+  id: string;
+  sessionId: string;
+  bouquetSize: BouquetSizeOption;
+  stems: SelectedStem[];
+  greenery: SelectedGreenery[];
+  wrappingStyle: WrappingStyle;
+  wrappings: WrappingOption[];
+  ribbon: RibbonOption;
+  card: GreetingCardData;
+  totalBouquetCost: number;
+  totalStemsCount: number;
+  addedAt: string;
+}
+
 export interface OrderItem {
   id: string;
   orderNumber: string;
+  sessionId?: string;
   createdAt: string;
   bouquetSize: BouquetSizeOption;
   stems: SelectedStem[];
